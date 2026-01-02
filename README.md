@@ -216,4 +216,10 @@ DELETE /health/activity/:id
 
 ---
 
+### Docker
+
+docker build -t health-tracker .
+docker run -p 4000:4000 --env-file .env health-tracker
+
+
 ## 📌 Notes
