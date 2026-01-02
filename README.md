@@ -36,26 +36,16 @@ npm install @supabase/supabase-js
 ```bash
 mkdir controllers models routes
 
-
-
 touch server.js .env
-
-
 
 touch controllers/authController.js
 touch controllers/healthController.js
 
-
-
 touch models/User.js
 touch models/HealthActivity.js
 
-
-
 touch routes/authRoutes.js
 touch routes/healthRoutes.js
-
-
 
 mkdir config
 touch config/supabaseClient.js
