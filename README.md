@@ -141,8 +141,8 @@ POST /auth/signup
 
 ```json
 {
-  "username": "Pranay",
-  "email": "pranay1@gmail.com",
+  "username": "Saravana",
+  "email": "saravana@gmail.com",
   "password": "123456"
 }
 ```
