@@ -1,69 +1,27 @@
-const supabase = require("../config/supabaseClient");
+const db = require("../config/db");
 
-exports.createActivity = async (req, res) => {
-  const { userId, activityType, description, duration, calories } = req.body;
+exports.addActivity = async (req, res) => {
+  const { user_id, activity, calories } = req.body;
 
-  const { data, error } = await supabase
-    .from("health_activities")
-    .insert([{
-      user_id: userId,
-      activity_type: activityType,
-      description,
-      duration,
-      calories
-    }])
-    .select();
+  try {
+    const result = await db.query(
+      "INSERT INTO health_activities (user_id, activity, calories) VALUES ($1, $2, $3) RETURNING *",
+      [user_id, activity, calories]
+    );
 
-  if (error) {
-    return res.status(400).json({ success: false, message: error.message });
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to add activity" });
   }
-
-  res.status(201).json({ success: true, activity: data[0] });
 };
 
-exports.getActivity = async (req, res) => {
-  const { id } = req.params;
-
-  const { data, error } = await supabase
-    .from("health_activities")
-    .select("*")
-    .eq("id", id)
-    .single();
-
-  if (error) {
-    return res.status(404).json({ success: false, message: "Activity not found" });
+exports.getActivities = async (req, res) => {
+  try {
+    const result = await db.query("SELECT * FROM health_activities");
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch activities" });
   }
-
-  res.status(200).json({ success: true, activity: data });
-};
-
-exports.updateActivity = async (req, res) => {
-  const { id } = req.params;
-
-  const { data, error } = await supabase
-    .from("health_activities")
-    .update(req.body)
-    .eq("id", id)
-    .select();
-
-  if (error) {
-    return res.status(400).json({ success: false, message: error.message });
-  }
-
-  res.status(200).json({ success: true, activity: data[0] });
-};
-
-exports.deleteActivity = async (req, res) => {
-  const { id } = req.params;
-
-  const { error } = await supabase
-    .from("health_activities")
-    .delete()
-    .eq("id", id);
-
-  if (error) {
-    return res.status(400).json({ success: false, message: error.message });
-  }
-
-  res.status(200).json({ success: true, message: "Activity deleted successfully" });
 };
