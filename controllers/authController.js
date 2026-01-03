@@ -1,13 +1,10 @@
-const db = require("../config/db");
+const pool = require("../db");
 
-/**
- * POST /auth/register
- */
 exports.register = async (req, res) => {
-  const { email, password } = req.body;
-
   try {
-    const result = await db.query(
+    const { email, password } = req.body;
+
+    const result = await pool.query(
       "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id, email",
       [email, password]
     );
@@ -15,19 +12,16 @@ exports.register = async (req, res) => {
     res.status(201).json(result.rows[0]);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "User registration failed" });
+    res.status(500).json({ error: "Registration failed" });
   }
 };
 
-/**
- * POST /auth/login
- */
 exports.login = async (req, res) => {
-  const { email, password } = req.body;
-
   try {
-    const result = await db.query(
-      "SELECT id, email FROM users WHERE email=$1 AND password=$2",
+    const { email, password } = req.body;
+
+    const result = await pool.query(
+      "SELECT id, email FROM users WHERE email = $1 AND password = $2",
       [email, password]
     );
 
