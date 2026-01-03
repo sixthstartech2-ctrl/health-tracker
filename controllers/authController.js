@@ -1,36 +1,43 @@
-const supabase = require("../config/supabaseClient");
+const db = require("../config/db");
 
-exports.signup = async (req, res) => {
-  const { username, email, password } = req.body;
+/**
+ * POST /auth/register
+ */
+exports.register = async (req, res) => {
+  const { email, password } = req.body;
 
-  const { data, error } = await supabase
-    .from("users")
-    .insert([{ username, email, password }])
-    .select();
+  try {
+    const result = await db.query(
+      "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id, email",
+      [email, password]
+    );
 
-  if (error) {
-    return res.status(400).json({ success: false, message: error.message });
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "User registration failed" });
   }
-
-  res.status(201).json({ success: true, user: data[0] });
 };
 
+/**
+ * POST /auth/login
+ */
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
-  const { data, error } = await supabase
-    .from("users")
-    .select("*")
-    .eq("email", email)
-    .single();
+  try {
+    const result = await db.query(
+      "SELECT id, email FROM users WHERE email=$1 AND password=$2",
+      [email, password]
+    );
 
-  if (error || !data) {
-    return res.status(404).json({ success: false, message: "User not found" });
+    if (result.rows.length === 0) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Login failed" });
   }
-
-  if (data.password !== password) {
-    return res.status(401).json({ success: false, message: "Incorrect password" });
-  }
-
-  res.status(200).json({ success: true, message: "Login successful", user: data });
 };
