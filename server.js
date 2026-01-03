@@ -1,22 +1,16 @@
+require("dotenv").config();
 const express = require("express");
-const dotenv = require("dotenv");
-
-dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 4000;
-
 app.use(express.json());
 
-// 👇 ADD THIS HERE
 app.get("/", (req, res) => {
   res.send("Health Tracker API is running");
 });
 
-// existing routes
-app.use("/auth", require("./routes/authRoutes"));
-app.use("/health", require("./routes/healthRoutes"));
+app.use("/api/auth", require("./routes/authRoutes"));
 
-app.listen(PORT, "0.0.0.0", () => {
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
