@@ -9,7 +9,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/auth", require("./routes/authRoutes"));
-app.use("/health", require("./routes/healthRoutes));
+app.use("/health", require("./routes/healthRoutes"));
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
