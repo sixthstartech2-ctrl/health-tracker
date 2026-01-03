@@ -4,10 +4,12 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 
+// Root check
 app.get("/", (req, res) => {
   res.send("Health Tracker API is running");
 });
 
+// Routes
 app.use("/auth", require("./routes/authRoutes"));
 app.use("/health", require("./routes/healthRoutes"));
 
