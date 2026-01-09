@@ -25,9 +25,6 @@ npm install express dotenv
 npm install -g pm2
 ```
 
-```bash
-npm install @supabase/supabase-js
-```
 
 ---
 
@@ -48,7 +45,7 @@ touch routes/authRoutes.js
 touch routes/healthRoutes.js
 
 mkdir config
-touch config/supabaseClient.js
+touch config/db.js
 ```
 
 ---
@@ -56,9 +53,13 @@ touch config/supabaseClient.js
 ## 🔐 Environment Variables (`.env`)
 
 ```env
-SUPABASE_URL=https://your-project-id.supabase.co
-SUPABASE_ANON_KEY=your-anon-key
 PORT=4000
+
+DB_HOST=db
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=postgres
+DB_NAME=health_tracker
 ```
 
 ---
