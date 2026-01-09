@@ -50,17 +50,6 @@ touch config/db.js
 
 ---
 
-## 🔐 Environment Variables (`.env`)
-
-```env
-PORT=4000
-
-DB_HOST=db
-DB_PORT=5432
-DB_USER=postgres
-DB_PASSWORD=postgres
-DB_NAME=health_tracker
-```
 
 ---
 
@@ -76,7 +65,7 @@ tailscale funnel 4000
 
 ---
 
-## 🗄️ Supabase Database Setup
+## 🗄️ Database Setup
 
 Open **SQL Editor** in Supabase and run the following queries.
 
